@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { Button } from "@mui/material";
 import { AuthContext } from "react-oauth2-code-pkce";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./store/authSlice";
@@ -13,6 +12,7 @@ import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import Activity from "./pages/Activity";
 import ActivityDetails from "./pages/ActivityDetails";
+import Recommendation from "./pages/Recommendation";
 
 const App = () => {
 
@@ -25,12 +25,12 @@ const [authReady, setAuthReady] = useState(false);
     if (token) {
       dispatch(setCredentials({ token, user: tokenData }));
       setAuthReady(true);
-      console.log(token)
-      console.log(tokenData)
+      
+      // console.log(tokenData)
     }
 
 
-  }, [token, tokenData, dispatch]);
+  }, [token, tokenData]);
 
   if (!authReady) return ;
 
@@ -71,6 +71,14 @@ const [authReady, setAuthReady] = useState(false);
           }
         />
 
+  <Route
+          path="/recommendations"
+          element={
+            <ProtectedRoute>
+              <Recommendation/>
+            </ProtectedRoute>
+          }
+        />
          <Route
           path="/activities/:id"
           element={

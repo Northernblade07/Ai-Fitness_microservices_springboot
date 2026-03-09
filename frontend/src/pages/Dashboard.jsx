@@ -11,18 +11,19 @@ import {
   Pie,
   Cell,
 } from "recharts";
+
 import { useEffect, useState } from "react";
 import { getActivity } from "../services/api";
+
+import { FaFire, FaRunning, FaChartPie } from "react-icons/fa";
 
 const COLORS = ["#6366f1", "#22c55e", "#f97316", "#f43f5e", "#14b8a6"];
 
 const Dashboard = () => {
 
   const [activities, setActivities] = useState([]);
-
   const [weeklyCalories, setWeeklyCalories] = useState([]);
   const [activityDistribution, setActivityDistribution] = useState([]);
-
   const [totalCalories, setTotalCalories] = useState(0);
 
   const fetchActivities = async () => {
@@ -32,7 +33,6 @@ const Dashboard = () => {
       const res = await getActivity();
       const data = res.data;
 
-      console.log(res)
       setActivities(data);
 
       processAnalytics(data);
@@ -96,75 +96,77 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    async function getActivities() {
-      fetchActivities();
-    }
-    getActivities()
+    fetchActivities();
   }, []);
 
   return (
 
-    <div className="p-8 max-w-6xl mx-auto">
+    <div className="px-4 md:px-8 py-12 max-w-7xl mx-auto mt-15">
+
+      {/* Header */}
 
       <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-3xl font-bold mb-10  text-transparent bg-clip-text"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-3xl md:text-4xl font-bold mb-12 text-white"
       >
         Fitness Dashboard
       </motion.h2>
 
       {/* Analytics Cards */}
 
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
 
         <AnalyticsCard
           title="Calories Burned"
           value={`${totalCalories} kcal`}
+          icon={<FaFire />}
         />
 
         <AnalyticsCard
           title="Total Workouts"
           value={activities.length}
+          icon={<FaRunning />}
         />
 
         <AnalyticsCard
           title="Activity Types"
           value={activityDistribution.length}
+          icon={<FaChartPie />}
         />
 
       </div>
 
       {/* Charts */}
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 ">
 
-        {/* Weekly Calories */}
+        {/* Weekly Chart */}
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="glass-card rounded-2xl p-6"
         >
 
-          <h3 className="font-semibold mb-4">
+          <h3 className="text-white font-semibold mb-6">
             Weekly Calories Burned
           </h3>
 
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={280}>
 
             <BarChart data={weeklyCalories}>
 
-              <XAxis dataKey="day" />
+              <XAxis dataKey="day" stroke="#ddd" />
 
-              <YAxis />
+              <YAxis stroke="#ddd" />
 
               <Tooltip />
 
               <Bar
                 dataKey="calories"
                 fill="#6366f1"
-                radius={[6, 6, 0, 0]}
+                radius={[8, 8, 0, 0]}
               />
 
             </BarChart>
@@ -173,19 +175,19 @@ const Dashboard = () => {
 
         </motion.div>
 
-        {/* Activity Type Distribution */}
+        {/* Pie Chart */}
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-white rounded-xl shadow-lg p-6"
+          className="glass-card rounded-2xl p-6"
         >
 
-          <h3 className="font-semibold mb-4">
+          <h3 className="text-white font-semibold mb-6">
             Activity Distribution
           </h3>
 
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={280}>
 
             <PieChart>
 
@@ -193,7 +195,7 @@ const Dashboard = () => {
                 data={activityDistribution}
                 dataKey="value"
                 nameKey="name"
-                outerRadius={90}
+                outerRadius={100}
                 label
               >
 

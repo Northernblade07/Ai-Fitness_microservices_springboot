@@ -34,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="w-full backdrop-blur-md nav bg-indigo-200 border-b border-gray-200 fixed top-0 z-50 rounded-b-3xl">
+    <nav className="w-full backdrop-blur-md nav border-b-2 border-gray-200 fixed top-0 z-50 rounded-b-3xl">
 
       <div className="max-w-7xl mx-auto px-6">
 
@@ -44,9 +44,9 @@ const Navbar = () => {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl font-bold text-indigo-600 tracking-wide"
+            className="text-2xl font-bold text-indigo-600 tracking-wide flex items-center justify-around"
           >
-            FitnessAI
+             <span><img className="h-16 " src="/logo.svg" alt="" /></span>Fitly-AI
           </motion.div>
 
           {/* Desktop Menu */}
@@ -65,7 +65,7 @@ const Navbar = () => {
                   to={link.path}
                   className={({ isActive }) =>
                     `relative font-medium transition duration-300 
-                    ${isActive ? "text-indigo-600" : "text-gray-700"}`
+                    ${isActive ? "text-red-600" : "text-gray-700"}`
                   }
                 >
                   {({ isActive }) => (
@@ -76,7 +76,7 @@ const Navbar = () => {
                       {/* Animated underline */}
                       <motion.span
                         layoutId="navbar-indicator"
-                        className={`absolute left-0 -bottom-1 h-[2px] bg-indigo-600 ${
+                        className={`absolute left-0 -bottom-1 h-[2px] bg-indigo-700 ${
                           isActive ? "w-full" : "w-0 group-hover:w-full"
                         } transition-all duration-300`}
                       />

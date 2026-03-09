@@ -11,7 +11,7 @@ body {
 
 
 .nav {
-  background: linear-gradient(-45deg, #e497be, #84a8e2, #b88ae3, #8385de);
+  background: linear-gradient(-45deg, #e497be, #5d88ce, #fc7ea8, #7972f9);
   background-size: 400% 400%;
   animation: gradientWave 20s ease infinite;    
 }

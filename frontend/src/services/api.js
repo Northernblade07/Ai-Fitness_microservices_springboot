@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL= 'http://localhost:8080/api';
+const API_URL = 'http://18.232.38.61:8080/api';
 
 const api = axios.create({
     baseURL:API_URL,
@@ -37,3 +37,7 @@ export const getActivityDetail =(id)=>{
 export const getActivityrecommendations =(id)=>{
    return api.get(`/recommendations/activity/${id}`)
 }
+
+export const getUserRecommendations = (userId) => {
+  return api.get(`/recommendations/user/${userId}`);
+};  

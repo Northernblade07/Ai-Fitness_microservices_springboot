@@ -6,6 +6,19 @@ import {
   getActivityrecommendations,
 } from "../services/api";
 
+import {
+  FaRunning,
+  FaClock,
+  FaFire,
+  FaBrain,
+  FaLightbulb,
+  FaArrowUp,
+  FaShieldAlt
+} from "react-icons/fa";
+import { CiTimer } from "react-icons/ci";
+import { FaHourglassStart } from "react-icons/fa";
+
+
 const ActivityDetails = () => {
 
   const { id } = useParams();
@@ -17,27 +30,41 @@ const ActivityDetails = () => {
   const [loadingRecommendation, setLoadingRecommendation] = useState(false);
 
   const fetchActivityDetail = async () => {
+
     try {
+
       const res = await getActivityDetail(id);
       setActivity(res.data);
     } catch (error) {
+
       console.error("Failed to fetch activity:", error);
+
     } finally {
+
       setLoadingActivity(false);
+
     }
+
   };
 
   const fetchActivityRecommendation = async () => {
+
     setLoadingRecommendation(true);
 
     try {
+
       const res = await getActivityrecommendations(id);
       setRecommendation(res.data);
     } catch (error) {
+
       console.error("Failed to fetch recommendation:", error);
+
     } finally {
+
       setLoadingRecommendation(false);
+
     }
+
   };
 
   useEffect(() => {
@@ -46,7 +73,7 @@ const ActivityDetails = () => {
 
   if (loadingActivity) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-500">
+      <div className="flex justify-center items-center h-screen text-gray-300">
         Loading activity...
       </div>
     );
@@ -65,42 +92,83 @@ const ActivityDetails = () => {
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto mt-24 p-6"
+      className="max-w-5xl mx-auto mt-24 px-4"
     >
 
-      <h2 className="text-3xl font-bold mb-10  text-transparent bg-clip-text">
+      {/* Header */}
+
+      <h2 className="text-3xl font-bold mb-10 text-white">
         Activity Analysis
       </h2>
 
-      {/* Activity Card */}
+      {/* Activity Info Card */}
 
-      <div className="backdrop-blur-lg bg-white/70 border border-gray-200 rounded-2xl shadow-xl p-6 space-y-4">
+      <div className="glass-card rounded-2xl shadow-xl p-6 space-y-4">
 
-        <div className="flex justify-between">
-          <span className="text-gray-500">Activity</span>
-          <span className="font-semibold">{activity.type}</span>
-        </div>
+        <InfoRow
+          icon={<FaRunning />}
+          label="Activity"
+          value={activity.type}
+        />
 
-        <div className="flex justify-between">
-          <span className="text-gray-500">Duration</span>
-          <span className="font-semibold">{activity.duration} minutes</span>
-        </div>
+        <InfoRow
+          icon={<FaClock />}
+          label="Duration"
+          value={`${activity.duration} minutes`}
+        />
 
-        <div className="flex justify-between">
-          <span className="text-gray-500">Calories</span>
-          <span className="font-semibold">{activity.caloriesBurned}</span>
-        </div>
+        <InfoRow
+          icon={<FaFire />}
+          label="Calories"
+          value={`${activity.caloriesBurned} kcal`}
+        />
 
-        <div className="flex justify-between">
-          <span className="text-gray-500">Created</span>
-          <span className="font-semibold">
-            {new Date(activity.createdAt).toLocaleString()}
-          </span>
-        </div>
+        <InfoRow
+        icon={<CiTimer />
+}
+          label="Created"
+          value={new Date(activity.createdAt).toLocaleString()}
+        />
+
+             <InfoRow
+             icon={<FaHourglassStart />
+}
+          label="Start Time"
+          value={new Date(activity.startTime).toLocaleString()}
+        />
+
+        {/* Additional Metrics */}
+
+        {activity.additionalMetrics && (
+
+          <div>
+
+            <p className="text-gray-100 text-md mb-2">
+              Additional Metrics
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+
+              {Object.entries(activity.additionalMetrics).map(([key, value]) => (
+
+                <div
+                  key={key}
+                  className="bg-white/10 rounded-lg p-3 text-sm text-white"
+                >
+                  <span className="text-gray-300">{key}</span>: {value}
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+        )}
 
       </div>
 
-      {/* Button */}
+      {/* AI Button */}
 
       <button
         onClick={fetchActivityRecommendation}
@@ -110,98 +178,54 @@ const ActivityDetails = () => {
       </button>
 
       {loadingRecommendation && (
-        <p className="mt-4 text-gray-500">
-          AI is analyzing your activity...
+        <p className="mt-4 text-gray-400">
+          AI is analyzing your workout...
         </p>
       )}
 
-      {/* Recommendation Section */}
+      {/* Recommendation */}
 
       {recommendation && (
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-10 space-y-6"
+          className="mt-12 space-y-6"
         >
 
           {/* AI Analysis */}
 
-          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold mb-2">
-              AI Analysis
-            </h3>
-
-            <p className="text-gray-700 whitespace-pre-line">
-              {recommendation.Recommendation}
-            </p>
-          </div>
-
-          {/* Suggestions */}
-
-          {recommendation.suggestions?.length > 0 && (
-
-            <div className="bg-green-50 border border-green-100 rounded-xl p-6 shadow-sm">
-
-              <h3 className="font-semibold mb-3">
-                Suggestions
-              </h3>
-
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
-
-                {recommendation.suggestions.map((s, i) => (
-                  <li key={i}>{s}</li>
-                ))}
-
-              </ul>
-
-            </div>
-
-          )}
-
-          {/* Improvements */}
-
-          {recommendation.improvements?.length > 0 && (
-
-            <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-6 shadow-sm">
-
-              <h3 className="font-semibold mb-3">
-                Improvements
-              </h3>
-
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
-
-                {recommendation.improvements.map((i, idx) => (
-                  <li key={idx}>{i}</li>
-                ))}
-
-              </ul>
-
-            </div>
-
-          )}
+          <Section
+            icon={<FaBrain />}
+            title="AI Analysis"
+            content={recommendation.recommendation}
+          />
 
           {/* Safety */}
 
-          {recommendation.safety?.length > 0 && (
+          <ListSection
+            icon={<FaShieldAlt />}
+            title="Safety Tips"
+            items={recommendation.safety}
+          />
+          {/* Suggestions */}
 
-            <div className="bg-red-50 border border-red-100 rounded-xl p-6 shadow-sm">
+          <ListSection
+            icon={<FaLightbulb />}
+            title="Suggestions"
+            items={recommendation.suggestions}
+          />
 
-              <h3 className="font-semibold mb-3">
-                Safety Tips
-              </h3>
+          {/* Improvements */}
 
-              <ul className="list-disc pl-5 space-y-1 text-gray-700">
+          <ListSection
+            icon={<FaArrowUp />}
+            title="Improvements"
+            items={recommendation.improvements}
+          />
 
-                {recommendation.safety.map((s, idx) => (
-                  <li key={idx}>{s}</li>
-                ))}
+          
 
-              </ul>
-
-            </div>
-
-          )}
 
         </motion.div>
 
@@ -214,3 +238,93 @@ const ActivityDetails = () => {
 };
 
 export default ActivityDetails;
+
+
+
+/* Info Row */
+
+const InfoRow = ({ icon, label, value }) => {
+
+  return (
+
+    <div className="flex justify-between items-center">
+
+      <div className="flex items-center gap-2 text-gray-300">
+
+        {icon}
+
+        <span>{label}</span>
+
+      </div>
+
+      <span className="font-semibold text-white">
+        {value}
+      </span>
+
+    </div>
+
+  );
+
+};
+
+
+
+/* Text Section */
+
+const Section = ({ icon, title, content }) => {
+
+  return (
+
+    <div className="glass-card rounded-xl p-6">
+
+      <div className="flex items-center gap-2 mb-2 text-white font-semibold">
+
+        {icon}
+
+        {title}
+
+      </div>
+
+      <p className="text-gray-300 whitespace-pre-line">
+        {content}
+      </p>
+
+    </div>
+
+  );
+
+};
+
+
+
+/* List Section */
+
+const ListSection = ({ icon, title, items }) => {
+
+  if (!items || !items.length) return null;
+
+  return (
+
+    <div className="glass-card rounded-xl p-6">
+
+      <div className="flex items-center gap-2 mb-3 text-white font-semibold">
+
+        {icon}
+
+        {title}
+
+      </div>
+
+      <ul className="list-disc pl-5 space-y-1 text-gray-300">
+
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+
+      </ul>
+
+    </div>
+
+  );
+
+};
