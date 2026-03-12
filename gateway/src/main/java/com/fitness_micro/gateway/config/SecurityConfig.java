@@ -36,7 +36,8 @@ public class SecurityConfig {
             "http://localhost:5173",
             "https://ai-fitness-micro-frontend.vercel.app",
             "https://ai-fitness-micro-frontend-prashant-bhandaris-projects.vercel.app",
-            "https://*.vercel.app"
+            "https://*.vercel.app" ,
+            "https://fitly-ai.duckdns.org"
     ));
         config.setAllowedMethods(Arrays.asList("GET","POST" ,"PUT" ,"DELETE" , "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization" , "Content-Type", "X-USER-ID"));

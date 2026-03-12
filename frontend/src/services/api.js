@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_URL = 'http://3.237.36.60:8080/api';
+const API_URL = "/api";
 
 const api = axios.create({
     baseURL:API_URL,
@@ -7,16 +7,16 @@ const api = axios.create({
 
 api.interceptors.request.use((config)=>{
 
-    const userId = localStorage.getItem("userId");
+    // const userId = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
 
     if(token){
         config.headers["Authorization"] = `Bearer ${token}`;
     }
 
-    if(userId){
-        config.headers['X-USER-ID'] = userId;
-    }
+    // if(userId){
+    //     config.headers['X-USER-ID'] = userId;
+    // }
     return config;
 });
 

@@ -1,37 +1,37 @@
-package com.fitness_micro.activityservice.controller;
+    package com.fitness_micro.activityservice.controller;
 
-import com.fitness_micro.activityservice.dto.ActivityRequest;
-import com.fitness_micro.activityservice.dto.ActivityResponse;
-import com.fitness_micro.activityservice.service.ActivityService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+    import com.fitness_micro.activityservice.dto.ActivityRequest;
+    import com.fitness_micro.activityservice.dto.ActivityResponse;
+    import com.fitness_micro.activityservice.service.ActivityService;
+    import lombok.RequiredArgsConstructor;
+    import org.springframework.http.ResponseEntity;
+    import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+    import java.util.List;
 
-@RestController
-@RequestMapping("/api/activity")
-@RequiredArgsConstructor
-public class ActivityController {
+    @RestController
+    @RequestMapping("/api/activity")
+    @RequiredArgsConstructor
+    public class ActivityController {
 
-    private final ActivityService activityService;
+        private final ActivityService activityService;
 
-    @PostMapping
-    public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest request , @RequestHeader("X-USER-ID") String userID){
-        request.setUserId(userID);
-        return ResponseEntity.ok(activityService.trackActivity(request));
+        @PostMapping
+        public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest request , @RequestHeader("X-USER-ID") String userID){
+            request.setUserId(userID);
+            return ResponseEntity.ok(activityService.trackActivity(request));
+        }
+
+        @GetMapping
+        public ResponseEntity<List<ActivityResponse>> getUserActivity(@RequestHeader("X-USER-ID") String userId){
+            return ResponseEntity.ok(activityService.getUserActivity(userId));
+        }
+
+        @GetMapping("/{activityId}")
+        public ResponseEntity<ActivityResponse> getActivityById(@PathVariable String activityId){
+            return ResponseEntity.ok(activityService.getActivityBYId(activityId));
+        }
+
+
+
     }
-
-    @GetMapping
-    public ResponseEntity<List<ActivityResponse>> getUserActivity(@RequestHeader("X-USER-ID") String userId){
-        return ResponseEntity.ok(activityService.getUserActivity(userId));
-    }
-
-    @GetMapping("/{activityId}")
-    public ResponseEntity<ActivityResponse> getActivityById(@PathVariable String activityId){
-        return ResponseEntity.ok(activityService.getActivityBYId(activityId));
-    }
-
-
-
-}
